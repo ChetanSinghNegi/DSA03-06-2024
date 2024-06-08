@@ -42,3 +42,5 @@ public class BrokenEconomy {
     return hm;
   }
 }
+
+// 10 1 5 10 15 22 33 40 42 55 66 34

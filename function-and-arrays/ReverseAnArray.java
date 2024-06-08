@@ -12,15 +12,15 @@ public class ReverseAnArray {
   }
 
   public static void reverse(int[] a) {
-    // write your code here
     int n = a.length;
-    for (int i = 0; i < n; i++) {
-      int right = n - 1 - i;
-      if (i >= right)
-        break;
-      int temp = a[i];
-      a[i] = a[right];
-      a[right] = temp;
+    int li = 0;
+    int ri = n - 1;
+    while (li < ri) {
+      int temp = a[li];
+      a[li] = a[ri];
+      a[ri] = temp;
+      li++;
+      ri--;
     }
   }
 

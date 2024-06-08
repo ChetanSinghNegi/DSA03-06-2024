@@ -40,3 +40,7 @@ public class FirstIndexAndLastIndex {
     return ans;
   }
 }
+
+// 15 1 5 10 15 22 33 33 33 33 33 40 42 55 66 77 33
+
+// 5 9
