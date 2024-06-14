@@ -7,10 +7,11 @@ public class InsertionSort {
     // write your code here
     int n = arr.length;
     for (int i = 1; i < n; i++) {
-      for (int j = 0; j < i; j++) {
-        boolean isGreater = isGreater(arr, j, i);
+      for (int j = i - 1; j >= 0; j--) {
+        boolean isGreater = isGreater(arr, j, j + 1);
         if (isGreater) {
-          swap(arr, j, i);
+          swap(arr, j, j + 1);
+        } else {
           break;
         }
       }
