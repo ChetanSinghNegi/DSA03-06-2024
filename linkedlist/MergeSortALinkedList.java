@@ -227,46 +227,32 @@ public class MergeSortALinkedList {
     }
 
     public static LinkedList mergeTwoSortedLists(LinkedList l1, LinkedList l2) {
-
-      LinkedList ans = new LinkedList();
-      Node stNode = new Node();
-      stNode.data = -1;
-      Node stNodeHead = stNode;
-      ans.size = l1.size + l2.size;
-
-      Node l1Temp = l1.head;
-      Node l2Temp = l2.head;
-
-      while (l1Temp != null && l2Temp != null) {
-        Node n = new Node();
-        if (l1Temp.data <= l2Temp.data) {
-          n.data = l1Temp.data;
-          stNode.next = n;
-          l1Temp = l1Temp.next;
+      Node l1Node = l1.head;
+      Node l2Node = l2.head;
+      Node dummy = new Node();
+      Node dummyHead = dummy;
+      LinkedList mergeLL = new LinkedList();
+      mergeLL.size = l1.size + l2.size;
+      while (l1Node != null && l2Node != null) {
+        if (l1Node.data <= l2Node.data) {
+          dummy.next = l1Node;
+          l1Node = l1Node.next;
+          dummy = dummy.next;
         } else {
-          n.data = l2Temp.data;
-          stNode.next = n;
-          l2Temp = l2Temp.next;
+          dummy.next = l2Node;
+          l2Node = l2Node.next;
+          dummy = dummy.next;
         }
-        stNode = stNode.next;
       }
-      while (l1Temp != null) {
-        Node n = new Node();
-        n.data = l1Temp.data;
-        l1Temp = l1Temp.next;
-        stNode.next = n;
-        stNode = n;
+      if (l1Node != null) {
+        dummy.next = l1Node;
       }
-      while (l2Temp != null) {
-        Node n = new Node();
-        n.data = l2Temp.data;
-        l2Temp = l2Temp.next;
-        stNode.next = n;
-        stNode = n;
+      if (l2Node != null) {
+        dummy.next = l2Node;
       }
-      ans.head = stNodeHead.next;
-      ans.tail = stNode;
-      return ans;
+      mergeLL.head = dummyHead.next;
+
+      return mergeLL;
     }
 
     public static LinkedList mergeSort(Node li) {

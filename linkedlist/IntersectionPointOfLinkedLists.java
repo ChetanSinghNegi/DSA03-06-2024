@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class AddTwoLinkedLists {
+public class IntersectionPointOfLinkedLists {
   public static class Node {
     int data;
     Node next;
@@ -393,59 +393,25 @@ public class AddTwoLinkedLists {
       tail.next = null;
     }
 
-    public static Node sumLLNode;
-
-    public static LinkedList addTwoLists(LinkedList one, LinkedList two) {
-      one.reverseDI();
-      two.reverseDI();
-      LinkedList sumLL = new LinkedList();
-      Node dummy = new Node();
-      Node dummyHead = dummy;
-      int quo = 0;
-      Node oneNode = one.head;
-      Node twoNode = two.head;
-      while (oneNode != null || twoNode != null || quo != 0) {
-        int sum = quo;
-        if (oneNode != null) {
-          sum += oneNode.data;
-          oneNode = oneNode.next;
-        }
-        if (twoNode != null) {
-          sum += twoNode.data;
-          twoNode = twoNode.next;
-        }
-        Node newNode = new Node();
-        newNode.data = sum % 10;
-        dummy.next = newNode;
-        dummy = dummy.next;
-        sumLL.size++;
-        quo = sum / 10;
-      }
-      Node dummyHeadNextPointer = dummyHead.next;
-      dummyHead.next = null;
-      sumLL.head = dummyHeadNextPointer;
-      sumLL.tail = dummy;
-      Node temp = reverseList(sumLL.head);
-      sumLL.head = temp;
-      return sumLL;
+    public static int findIntersection(LinkedList one, LinkedList two) {
+      // write your code here
+      int intersectedPoint = findIntersectionHelper(one.head, two.head, one.size, two.size);
+      return intersectedPoint;
     }
 
-    public static Node reverseList(Node head) {
-      if (head == null || head.next == null) {
-        return head;
+    public static int findIntersectionHelper(Node n1, Node n2, int s1, int s2) {
+      if (n1 == null || n2 == null || s1 == 0 || s2 == 0)
+        return -1;
+      if (s1 > s2) {
+        return findIntersectionHelper(n1.next, n2, s1 - 1, s2);
+      } else if (s1 < s2) {
+        return findIntersectionHelper(n1, n2.next, s1, s2 - 1);
       }
-      Node pre = null;
-      Node curr = head;
-      while (curr != null) {
-        Node post = curr.next;
-        curr.next = pre;
-        pre = curr;
-        curr = post;
+      if (n1 == n2) {
+        return n1.data;
       }
-      head = pre;
-      return head;
+      return findIntersectionHelper(n1.next, n2.next, s1 - 1, s2 - 1);
     }
-
   }
 
   public static void main(String[] args) throws Exception {
@@ -467,16 +433,21 @@ public class AddTwoLinkedLists {
       l2.addLast(d);
     }
 
-    LinkedList sum = LinkedList.addTwoLists(l1, l2);
+    int li = Integer.parseInt(br.readLine());
+    int di = Integer.parseInt(br.readLine());
+    if (li == 1) {
+      Node n = l1.getNodeAt(di);
+      l2.tail.next = n;
+      l2.tail = l1.tail;
+      l2.size += l1.size - di;
+    } else {
+      Node n = l2.getNodeAt(di);
+      l1.tail.next = n;
+      l1.tail = l2.tail;
+      l1.size += l2.size - di;
+    }
 
-    int a = Integer.parseInt(br.readLine());
-    int b = Integer.parseInt(br.readLine());
-
-    l1.display();
-    l2.display();
-    sum.display();
-    sum.addFirst(a);
-    sum.addLast(b);
-    sum.display();
+    int inter = LinkedList.findIntersection(l1, l2);
+    System.out.println(inter);
   }
 }
