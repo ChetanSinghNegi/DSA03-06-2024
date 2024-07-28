@@ -1,7 +1,8 @@
+
 import java.io.*;
 import java.util.*;
 
-public class IsABinarySearchTree {
+public class LargestBstSubtree {
   public static class Node {
     int data;
     Node left;
@@ -79,45 +80,48 @@ public class IsABinarySearchTree {
     display(node.right);
   }
 
-  public static int height(Node node) {
-    if (node == null) {
-      return -1;
-    }
-
-    int lh = height(node.left);
-    int rh = height(node.right);
-
-    int th = Math.max(lh, rh) + 1;
-    return th;
-  }
-
   public static class BSTPair {
     int min;
     int max;
     boolean tillBST;
+    int size;
 
-    BSTPair(int min, int max, boolean tillBST) {
+    BSTPair(int min, int max, boolean tillBST, int size) {
       this.min = min;
       this.max = max;
       this.tillBST = tillBST;
+      this.size = size;
     }
   }
 
-  public static BSTPair isBST(Node node) {
-    if (node == null) {
-      return new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, true);
-    }
-    BSTPair leftBSTPair = isBST(node.left);
-    BSTPair rightBSTPair = isBST(node.right);
-    if (leftBSTPair.tillBST == true && rightBSTPair.tillBST == true && leftBSTPair.max < node.data
-        && rightBSTPair.min > node.data) {
-      BSTPair currBSTPair = new BSTPair(Math.min(node.data, Math.min(leftBSTPair.min, rightBSTPair.min)),
-          Math.max(node.data, Math.max(leftBSTPair.max, rightBSTPair.max)),
-          true);
-      return currBSTPair;
-    }
-    return new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, false);
+  public static int resBSTData;
+  public static int resBSTSize;
 
+  public static void largetBSTFunc(Node node) {
+    resBSTData = -1;
+    resBSTSize = -1;
+    largetBSTHelper(node);
+  }
+
+  public static BSTPair largetBSTHelper(Node node) {
+    if (node == null) {
+      return new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, true, 0);
+    }
+    BSTPair currPair;
+    BSTPair leftBSTPair = largetBSTHelper(node.left);
+    BSTPair rightBSTPair = largetBSTHelper(node.right);
+    if (leftBSTPair.tillBST && rightBSTPair.tillBST && leftBSTPair.max < node.data && rightBSTPair.min > node.data) {
+      currPair = new BSTPair(Math.min(node.data, Math.min(leftBSTPair.min, rightBSTPair.min)),
+          Math.max(node.data, Math.max(leftBSTPair.max, rightBSTPair.max)), true,
+          leftBSTPair.size + rightBSTPair.size + 1);
+    } else {
+      currPair = new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, false, 0);
+    }
+    if (currPair.tillBST && currPair.size > resBSTSize) {
+      resBSTData = node.data;
+      resBSTSize = currPair.size;
+    }
+    return currPair;
   }
 
   public static void main(String[] args) throws Exception {
@@ -135,11 +139,9 @@ public class IsABinarySearchTree {
 
     Node root = construct(arr);
 
-    // write your code here
+    largetBSTFunc(root);
+    System.out.println(resBSTData + "@" + resBSTSize);
 
-    BSTPair finalPair = isBST(root);
-    System.out.println(finalPair.tillBST);
-    return;
   }
 
 }

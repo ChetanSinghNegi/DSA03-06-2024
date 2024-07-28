@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class IsABinarySearchTree {
+public class IsBalancedTree {
   public static class Node {
     int data;
     Node left;
@@ -79,44 +79,19 @@ public class IsABinarySearchTree {
     display(node.right);
   }
 
-  public static int height(Node node) {
-    if (node == null) {
+  public static boolean isBalanceTreeFlag = true;
+
+  public static int isBalanceTreeFunc(Node node) {
+    if (node == null || isBalanceTreeFlag == false)
+      return -1;
+
+    int leftTreeHeight = isBalanceTreeFunc(node.left);
+    int rightTreeHeight = isBalanceTreeFunc(node.right);
+    if (Math.abs(leftTreeHeight - rightTreeHeight) > 1) {
+      isBalanceTreeFlag = false;
       return -1;
     }
-
-    int lh = height(node.left);
-    int rh = height(node.right);
-
-    int th = Math.max(lh, rh) + 1;
-    return th;
-  }
-
-  public static class BSTPair {
-    int min;
-    int max;
-    boolean tillBST;
-
-    BSTPair(int min, int max, boolean tillBST) {
-      this.min = min;
-      this.max = max;
-      this.tillBST = tillBST;
-    }
-  }
-
-  public static BSTPair isBST(Node node) {
-    if (node == null) {
-      return new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, true);
-    }
-    BSTPair leftBSTPair = isBST(node.left);
-    BSTPair rightBSTPair = isBST(node.right);
-    if (leftBSTPair.tillBST == true && rightBSTPair.tillBST == true && leftBSTPair.max < node.data
-        && rightBSTPair.min > node.data) {
-      BSTPair currBSTPair = new BSTPair(Math.min(node.data, Math.min(leftBSTPair.min, rightBSTPair.min)),
-          Math.max(node.data, Math.max(leftBSTPair.max, rightBSTPair.max)),
-          true);
-      return currBSTPair;
-    }
-    return new BSTPair(Integer.MAX_VALUE, Integer.MIN_VALUE, false);
+    return Math.max(leftTreeHeight, rightTreeHeight) + 1;
 
   }
 
@@ -136,10 +111,8 @@ public class IsABinarySearchTree {
     Node root = construct(arr);
 
     // write your code here
-
-    BSTPair finalPair = isBST(root);
-    System.out.println(finalPair.tillBST);
-    return;
+    isBalanceTreeFunc(root);
+    System.out.println(isBalanceTreeFlag);
   }
 
 }
